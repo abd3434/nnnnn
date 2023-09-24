@@ -65,10 +65,6 @@ filtered_df = df[
     ((df['smoking_status'] == selected_smoking_status) | (selected_smoking_status == 'All'))
 ]
 
-# Display the filtered data
-st.write("Filtered Data")
-st.write(filtered_df)
-
 # 3D Scatter Plot
 st.subheader("3D Scatter Plot of Age, Glucose Level, and BMI")
 fig_3d = px.scatter_3d(filtered_df, x='age', y='avg_glucose_level', z='bmi', color='stroke',
@@ -76,3 +72,33 @@ fig_3d = px.scatter_3d(filtered_df, x='age', y='avg_glucose_level', z='bmi', col
                         labels={'age': 'Age', 'avg_glucose_level': 'Average Glucose Level', 'bmi': 'BMI'},
                         color_discrete_map={0: 'blue', 1: 'red'})
 st.plotly_chart(fig_3d)
+
+# Contour Plot
+st.subheader("Contour Plot of Age vs. Average Glucose Level")
+fig_contour = px.density_contour(filtered_df, x='age', y='avg_glucose_level', color='stroke',
+                                 title='Contour Plot of Age vs. Average Glucose Level',
+                                 labels={'age': 'Age', 'avg_glucose_level': 'Average Glucose Level'},
+                                 color_discrete_map={0: 'blue', 1: 'red'})
+st.plotly_chart(fig_contour)
+
+# Pie Chart
+st.subheader(f"Pie Chart: Distribution of Stroke for {selected_gender if selected_gender != 'All' else 'All Genders'}")
+fig_pie = px.pie(filtered_df, names='stroke', title=f"Distribution of Stroke for {selected_gender if selected_gender != 'All' else 'All Genders'}")
+st.plotly_chart(fig_pie)
+
+# Bar Chart with Range Slider
+st.subheader(f"Bar Chart: Average Glucose Level vs. BMI for Age {age_range[0]} - {age_range[1]}")
+fig_bar = px.bar(filtered_df, x='avg_glucose_level', y='bmi', color='age', 
+                 title=f"Average Glucose Level vs. BMI for Age {age_range[0]} - {age_range[1]}",
+                 labels={'avg_glucose_level': 'Average Glucose Level', 'bmi': 'BMI'},
+                 range_x=[float(df['avg_glucose_level'].min()), float(df['avg_glucose_level'].max())],
+                 range_y=[float(df['bmi'].min()), float(df['bmi'].max())])
+st.plotly_chart(fig_bar)
+
+# Sunburst Chart
+st.subheader("Sunburst Chart: Relationship between Smoking Status, Gender, and Stroke")
+fig_sunburst = px.sunburst(filtered_df, path=['smoking_status', 'gender'], values='stroke',
+                           title='Sunburst Chart: Relationship between Smoking Status, Gender, and Stroke',
+                           color_continuous_scale='Viridis',
+                           labels={'smoking_status': 'Smoking Status', 'gender': 'Gender', 'stroke': 'Stroke'})
+st.plotly_chart(fig_sunburst)

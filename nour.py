@@ -15,9 +15,6 @@ st.sidebar.header("Filter Data")
 gender_options = ['All'] + df['gender'].unique().tolist()
 selected_gender = st.sidebar.selectbox("Select Gender", gender_options)
 
-# Age Slider
-age_range = st.sidebar.slider("Select Age Range", int(df['age'].min()), int(df['age'].max()), (int(df['age'].min()), int(df['age'].max())))
-
 # Hypertension Dropdown
 hypertension_options = ['All'] + df['hypertension'].unique().astype(str).tolist()
 selected_hypertension = st.sidebar.selectbox("Select Hypertension", hypertension_options)
@@ -42,6 +39,9 @@ selected_residence_type = st.sidebar.selectbox("Select Residence Type", residenc
 smoking_status_options = ['All'] + df['smoking_status'].unique().tolist()
 selected_smoking_status = st.sidebar.selectbox("Select Smoking Status", smoking_status_options)
 
+# Age Slider
+age_range = st.sidebar.slider("Select Age Range", int(df['age'].min()), int(df['age'].max()), (int(df['age'].min()), int(df['age'].max())))
+
 # Average Glucose Level Slider
 avg_glucose_level_range = st.sidebar.slider("Select Average Glucose Level Range", float(df['avg_glucose_level'].min()), 
                                             float(df['avg_glucose_level'].max()), 
@@ -54,16 +54,17 @@ bmi_range = st.sidebar.slider("Select BMI Range", float(df['bmi'].min()), float(
 # Apply filters
 filtered_df = df[
     ((df['gender'] == selected_gender) | (selected_gender == 'All')) &
-    ((df['age'] >= age_range[0]) & (df['age'] <= age_range[1])) &
     ((df['hypertension'].astype(str) == selected_hypertension) | (selected_hypertension == 'All')) &
     ((df['heart_disease'].astype(str) == selected_heart_disease) | (selected_heart_disease == 'All')) &
     ((df['ever_married'] == selected_ever_married) | (selected_ever_married == 'All')) &
     ((df['work_type'] == selected_work_type) | (selected_work_type == 'All')) &
     ((df['Residence_type'] == selected_residence_type) | (selected_residence_type == 'All')) &
     ((df['smoking_status'] == selected_smoking_status) | (selected_smoking_status == 'All')) &
+    ((df['age'] >= age_range[0]) & (df['age'] <= age_range[1])) &
     ((df['avg_glucose_level'] >= avg_glucose_level_range[0]) & (df['avg_glucose_level'] <= avg_glucose_level_range[1])) &
     ((df['bmi'] >= bmi_range[0]) & (df['bmi'] <= bmi_range[1]))
 ]
+
 
 # 3D Scatter Plot
 st.subheader("3D Scatter Plot of Age, Glucose Level, and BMI")

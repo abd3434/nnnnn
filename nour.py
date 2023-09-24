@@ -14,9 +14,6 @@ st.write("Stroke is a critical health condition that requires attention and unde
 # Filter the data based on conditions
 st.sidebar.header("Filter Data")
 
-# Filter the data based on conditions
-st.sidebar.header("Filter Data")
-
 # Gender Dropdown
 gender_options = ['All'] + df['gender'].unique().tolist()
 selected_gender = st.sidebar.selectbox("Select Gender", gender_options)

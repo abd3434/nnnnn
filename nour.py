@@ -24,10 +24,6 @@ filtered_df = df[(df['age'] >= age_range[0]) & (df['age'] <= age_range[1]) &
                   (df['hypertension'] == int(hypertension_checkbox)) & 
                   (df['heart_disease'] == int(heart_disease_checkbox))]
 
-# Display the filtered data
-st.write("Filtered Data:")
-st.write(filtered_df)
-
 # 3D Scatter Plot
 st.subheader("3D Scatter Plot of Age, Glucose Level, and BMI")
 fig_3d = px.scatter_3d(filtered_df, x='age', y='avg_glucose_level', z='bmi', color='stroke',

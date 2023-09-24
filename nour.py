@@ -3,8 +3,7 @@ import pandas as pd
 import plotly.express as px
 
 # Load the healthcare data from CSV
-url = "https://raw.githubusercontent.com/your_username/your_repository/your_branch/healthcare-dataset-stroke-data-2.csv"
-df = pd.read_csv(url)
+df = pd.read_csv(healthcare-dataset-stroke-data-2.csv)
 
 # Streamlit app title
 st.title("Healthcare Data Visualization")

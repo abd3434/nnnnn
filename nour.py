@@ -42,15 +42,6 @@ selected_residence_type = st.sidebar.selectbox("Select Residence Type", residenc
 smoking_status_options = ['All'] + df['smoking_status'].unique().tolist()
 selected_smoking_status = st.sidebar.selectbox("Select Smoking Status", smoking_status_options)
 
-# Average Glucose Level Slider
-avg_glucose_level_range = st.sidebar.slider("Select Average Glucose Level Range", float(df['avg_glucose_level'].min()), 
-                                            float(df['avg_glucose_level'].max()), 
-                                            (float(df['avg_glucose_level'].min()), float(df['avg_glucose_level'].max())))
-
-# BMI Slider
-bmi_range = st.sidebar.slider("Select BMI Range", float(df['bmi'].min()), float(df['bmi'].max()), 
-                              (float(df['bmi'].min()), float(df['bmi'].max())))
-
 # Apply filters
 filtered_df = df[
     ((df['gender'] == selected_gender) | (selected_gender == 'All')) &
@@ -60,10 +51,20 @@ filtered_df = df[
     ((df['ever_married'] == selected_ever_married) | (selected_ever_married == 'All')) &
     ((df['work_type'] == selected_work_type) | (selected_work_type == 'All')) &
     ((df['Residence_type'] == selected_residence_type) | (selected_residence_type == 'All')) &
-    ((df['smoking_status'] == selected_smoking_status) | (selected_smoking_status == 'All')) &
-    ((df['avg_glucose_level'] >= avg_glucose_level_range[0]) & (df['avg_glucose_level'] <= avg_glucose_level_range[1])) &
-    ((df['bmi'] >= bmi_range[0]) & (df['bmi'] <= bmi_range[1]))
+    ((df['smoking_status'] == selected_smoking_status) | (selected_smoking_status == 'All'))
 ]
+
+# Calculate percentage of strokes
+total_count = len(filtered_df)
+stroke_count = filtered_df['stroke'].sum()
+no_stroke_count = total_count - stroke_count
+
+# Create a Pie Chart for stroke distribution
+st.subheader("Pie Chart: Distribution of Stroke")
+fig_pie_stroke = px.pie(values=[stroke_count, no_stroke_count], names=['Stroke', 'No Stroke'],
+                        title=f"Distribution of Stroke for {selected_gender if selected_gender != 'All' else 'All Genders'}",
+                        labels={'stroke': 'Stroke', 'no stroke': 'No Stroke'})
+st.plotly_chart(fig_pie_stroke)
 
 # 3D Scatter Plot
 st.subheader("3D Scatter Plot of Age, Glucose Level, and BMI")
@@ -80,11 +81,6 @@ fig_contour = px.density_contour(filtered_df, x='age', y='avg_glucose_level', co
                                  labels={'age': 'Age', 'avg_glucose_level': 'Average Glucose Level'},
                                  color_discrete_map={0: 'blue', 1: 'red'})
 st.plotly_chart(fig_contour)
-
-# Pie Chart
-st.subheader(f"Pie Chart: Distribution of Stroke for {selected_gender if selected_gender != 'All' else 'All Genders'}")
-fig_pie = px.pie(filtered_df, names='stroke', title=f"Distribution of Stroke for {selected_gender if selected_gender != 'All' else 'All Genders'}")
-st.plotly_chart(fig_pie)
 
 # Bar Chart with Range Slider
 st.subheader(f"Bar Chart: Average Glucose Level vs. BMI for Age {age_range[0]} - {age_range[1]}")

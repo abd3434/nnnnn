@@ -20,9 +20,19 @@ hypertension_checkbox = st.sidebar.checkbox("Hypertension", True)
 # Heart Disease Checkbox
 heart_disease_checkbox = st.sidebar.checkbox("Heart Disease", True)
 
-filtered_df = df[(df['age'] >= age_range[0]) & (df['age'] <= age_range[1]) & 
-                  (df['hypertension'] == int(hypertension_checkbox)) & 
-                  (df['heart_disease'] == int(heart_disease_checkbox))]
+# Dropdown for Work Type
+work_type_options = ['All'] + df['work_type'].unique().tolist()
+selected_work_type = st.sidebar.selectbox("Select Work Type", work_type_options)
+
+if selected_work_type == 'All':
+    filtered_df = df[(df['age'] >= age_range[0]) & (df['age'] <= age_range[1]) & 
+                      (df['hypertension'] == int(hypertension_checkbox)) & 
+                      (df['heart_disease'] == int(heart_disease_checkbox))]
+else:
+    filtered_df = df[(df['age'] >= age_range[0]) & (df['age'] <= age_range[1]) & 
+                      (df['hypertension'] == int(hypertension_checkbox)) & 
+                      (df['heart_disease'] == int(heart_disease_checkbox)) & 
+                      (df['work_type'] == selected_work_type)]
 
 # 3D Scatter Plot
 st.subheader("3D Scatter Plot of Age, Glucose Level, and BMI")
@@ -40,14 +50,9 @@ fig_contour = px.density_contour(filtered_df, x='age', y='avg_glucose_level', co
                                  color_discrete_map={0: 'blue', 1: 'red'})
 st.plotly_chart(fig_contour)
 
-# Dropdown for Work Type
-work_type_options = ['Private', 'Self-employed', 'Govt_job', 'children', 'Never_worked']
-selected_work_type = st.sidebar.selectbox("Select Work Type", work_type_options)
-work_type_filtered_df = filtered_df[filtered_df['work_type'] == selected_work_type]
-
 # Pie Chart
 st.subheader(f"Pie Chart: Distribution of Stroke for {selected_work_type} Work Type")
-fig_pie = px.pie(work_type_filtered_df, names='stroke', title=f"Distribution of Stroke for {selected_work_type} Work Type")
+fig_pie = px.pie(filtered_df, names='stroke', title=f"Distribution of Stroke for {selected_work_type} Work Type")
 st.plotly_chart(fig_pie)
 
 # Bar Chart with Range Slider for Glucose Level

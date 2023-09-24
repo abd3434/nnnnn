@@ -42,6 +42,15 @@ selected_residence_type = st.sidebar.selectbox("Select Residence Type", residenc
 smoking_status_options = ['All'] + df['smoking_status'].unique().tolist()
 selected_smoking_status = st.sidebar.selectbox("Select Smoking Status", smoking_status_options)
 
+# Average Glucose Level Slider
+avg_glucose_level_range = st.sidebar.slider("Select Average Glucose Level Range", float(df['avg_glucose_level'].min()), 
+                                            float(df['avg_glucose_level'].max()), 
+                                            (float(df['avg_glucose_level'].min()), float(df['avg_glucose_level'].max())))
+
+# BMI Slider
+bmi_range = st.sidebar.slider("Select BMI Range", float(df['bmi'].min()), float(df['bmi'].max()), 
+                              (float(df['bmi'].min()), float(df['bmi'].max())))
+
 # Apply filters
 filtered_df = df[
     ((df['gender'] == selected_gender) | (selected_gender == 'All')) &
@@ -51,20 +60,45 @@ filtered_df = df[
     ((df['ever_married'] == selected_ever_married) | (selected_ever_married == 'All')) &
     ((df['work_type'] == selected_work_type) | (selected_work_type == 'All')) &
     ((df['Residence_type'] == selected_residence_type) | (selected_residence_type == 'All')) &
-    ((df['smoking_status'] == selected_smoking_status) | (selected_smoking_status == 'All'))
+    ((df['smoking_status'] == selected_smoking_status) | (selected_smoking_status == 'All')) &
+    ((df['avg_glucose_level'] >= avg_glucose_level_range[0]) & (df['avg_glucose_level'] <= avg_glucose_level_range[1])) &
+    ((df['bmi'] >= bmi_range[0]) & (df['bmi'] <= bmi_range[1]))
 ]
 
-# Box Plot
-st.subheader("Box Plot of BMI by Smoking Status")
-fig_box = px.box(filtered_df, x='smoking_status', y='bmi', color='smoking_status',
-                 title='Box Plot of BMI by Smoking Status',
-                 labels={'smoking_status': 'Smoking Status', 'bmi': 'BMI'},
-                 color_discrete_map={'formerly smoked': 'blue', 'never smoked': 'green', 'smokes': 'red', 'Unknown': 'gray'})
-st.plotly_chart(fig_box)
+# 3D Scatter Plot
+st.subheader("3D Scatter Plot of Age, Glucose Level, and BMI")
+fig_3d = px.scatter_3d(filtered_df, x='age', y='avg_glucose_level', z='bmi', color='stroke',
+                        title='3D Scatter Plot of Age, Glucose Level, and BMI',
+                        labels={'age': 'Age', 'avg_glucose_level': 'Average Glucose Level', 'bmi': 'BMI'},
+                        color_discrete_map={0: 'blue', 1: 'red'})
+st.plotly_chart(fig_3d)
 
-# Violin Plot
-st.subheader("Violin Plot of Average Glucose Level by Marital Status")
-fig_violin = px.violin(filtered_df, x='ever_married', y='avg_glucose_level', box=True,
-                      title='Violin Plot of Average Glucose Level by Marital Status',
-                      labels={'ever_married': 'Marital Status', 'avg_glucose_level': 'Average Glucose Level'})
-st.plotly_chart(fig_violin)
+# Contour Plot
+st.subheader("Contour Plot of Age vs. Average Glucose Level")
+fig_contour = px.density_contour(filtered_df, x='age', y='avg_glucose_level', color='stroke',
+                                 title='Contour Plot of Age vs. Average Glucose Level',
+                                 labels={'age': 'Age', 'avg_glucose_level': 'Average Glucose Level'},
+                                 color_discrete_map={0: 'blue', 1: 'red'})
+st.plotly_chart(fig_contour)
+
+# Pie Chart
+st.subheader(f"Pie Chart: Distribution of Stroke for {selected_gender if selected_gender != 'All' else 'All Genders'}")
+fig_pie = px.pie(filtered_df, names='stroke', title=f"Distribution of Stroke for {selected_gender if selected_gender != 'All' else 'All Genders'}")
+st.plotly_chart(fig_pie)
+
+# Bar Chart with Range Slider
+st.subheader(f"Bar Chart: Average Glucose Level vs. BMI for Age {age_range[0]} - {age_range[1]}")
+fig_bar = px.bar(filtered_df, x='avg_glucose_level', y='bmi', color='age', 
+                 title=f"Average Glucose Level vs. BMI for Age {age_range[0]} - {age_range[1]}",
+                 labels={'avg_glucose_level': 'Average Glucose Level', 'bmi': 'BMI'},
+                 range_x=[float(df['avg_glucose_level'].min()), float(df['avg_glucose_level'].max())],
+                 range_y=[float(df['bmi'].min()), float(df['bmi'].max())])
+st.plotly_chart(fig_bar)
+
+# Sunburst Chart
+st.subheader("Sunburst Chart: Relationship between Smoking Status, Gender, and Stroke")
+fig_sunburst = px.sunburst(filtered_df, path=['smoking_status', 'gender'], values='stroke',
+                           title='Sunburst Chart: Relationship between Smoking Status, Gender, and Stroke',
+                           color_continuous_scale='Viridis',
+                           labels={'smoking_status': 'Smoking Status', 'gender': 'Gender', 'stroke': 'Stroke'})
+st.plotly_chart(fig_sunburst)

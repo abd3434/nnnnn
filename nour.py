@@ -8,6 +8,10 @@ df = pd.read_csv("stroke_data.csv")
 # Streamlit app title
 st.title("Healthcare Data Visualization")
 
+# Title and paragraph about Stroke
+st.header("Stroke")
+st.write("Stroke is a critical health condition that requires attention and understanding. It is a significant medical issue that impacts numerous individuals worldwide. Exploring and visualizing data related to stroke can provide insights into its prevalence, risk factors, and potential preventative measures.")
+
 # Filter the data based on conditions
 st.sidebar.header("Filter Data")
 

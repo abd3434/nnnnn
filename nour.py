@@ -19,11 +19,11 @@ selected_gender = st.sidebar.selectbox("Select Gender", gender_options)
 age_range = st.sidebar.slider("Select Age Range", int(df['age'].min()), int(df['age'].max()), (int(df['age'].min()), int(df['age'].max())))
 
 # Hypertension Dropdown
-hypertension_options = ['All'] + df['hypertension'].unique().tolist()
+hypertension_options = ['All'] + df['hypertension'].unique().astype(str).tolist()
 selected_hypertension = st.sidebar.selectbox("Select Hypertension", hypertension_options)
 
 # Heart Disease Dropdown
-heart_disease_options = ['All'] + df['heart_disease'].unique().tolist()
+heart_disease_options = ['All'] + df['heart_disease'].unique().astype(str).tolist()
 selected_heart_disease = st.sidebar.selectbox("Select Heart Disease", heart_disease_options)
 
 # Married Dropdown
@@ -55,8 +55,8 @@ selected_smoking_status = st.sidebar.selectbox("Select Smoking Status", smoking_
 filtered_df = df[
     ((df['gender'] == selected_gender) | (selected_gender == 'All')) &
     ((df['age'] >= age_range[0]) & (df['age'] <= age_range[1])) &
-    ((df['hypertension'] == int(selected_hypertension)) | (selected_hypertension == 'All')) &
-    ((df['heart_disease'] == int(selected_heart_disease)) | (selected_heart_disease == 'All')) &
+    ((df['hypertension'].astype(str) == selected_hypertension) | (selected_hypertension == 'All')) &
+    ((df['heart_disease'].astype(str) == selected_heart_disease) | (selected_heart_disease == 'All')) &
     ((df['ever_married'] == selected_ever_married) | (selected_ever_married == 'All')) &
     ((df['work_type'] == selected_work_type) | (selected_work_type == 'All')) &
     ((df['Residence_type'] == selected_residence_type) | (selected_residence_type == 'All')) &

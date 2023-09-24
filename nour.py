@@ -58,4 +58,33 @@ fig_3d = px.scatter_3d(filtered_df, x='age', y='avg_glucose_level', z='bmi', col
                         color_discrete_map={0: 'blue', 1: 'red'})
 st.plotly_chart(fig_3d)
 
-# ... (rest of the code remains the same)
+# Contour Plot
+st.subheader("Contour Plot of Age vs. Average Glucose Level")
+fig_contour = px.density_contour(filtered_df, x='age', y='avg_glucose_level', color='stroke',
+                                 title='Contour Plot of Age vs. Average Glucose Level',
+                                 labels={'age': 'Age', 'avg_glucose_level': 'Average Glucose Level'},
+                                 color_discrete_map={0: 'blue', 1: 'red'})
+st.plotly_chart(fig_contour)
+
+# Pie Chart
+st.subheader(f"Pie Chart: Distribution of Stroke for {selected_gender if selected_gender != 'All' else 'All Genders'}")
+fig_pie = px.pie(filtered_df, names='stroke', title=f"Distribution of Stroke for {selected_gender if selected_gender != 'All' else 'All Genders'}")
+st.plotly_chart(fig_pie)
+
+# Bar Chart with Range Slider for Glucose Level
+st.subheader("Bar Chart: Strokes Over Glucose Level")
+glucose_level_range = st.sidebar.slider("Select Glucose Level Range", float(df['avg_glucose_level'].min()), 
+                                       float(df['avg_glucose_level'].max()), 
+                                       (float(df['avg_glucose_level'].min()), float(df['avg_glucose_level'].max())))
+glucose_filtered_df = df[(df['avg_glucose_level'] >= glucose_level_range[0]) & 
+                         (df['avg_glucose_level'] <= glucose_level_range[1])]
+
+fig_bar_glucose = px.bar(glucose_filtered_df, x='avg_glucose_level', y='stroke', 
+                         title='Strokes Over Glucose Level',
+                         labels={'avg_glucose_level': 'Average Glucose Level', 'stroke': 'Stroke'},
+                         range_x=[float(df['avg_glucose_level'].min()), float(df['avg_glucose_level'].max())],
+                         range_y=[0, 1],
+                         color='stroke',
+                         color_discrete_map={0: 'blue', 1: 'red'},
+                         text='stroke')
+st.plotly_chart(fig_bar_glucose)

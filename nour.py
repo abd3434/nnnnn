@@ -38,6 +38,10 @@ selected_work_type = st.sidebar.selectbox("Select Work Type", work_type_options)
 residence_type_options = ['All'] + df['Residence_type'].unique().tolist()
 selected_residence_type = st.sidebar.selectbox("Select Residence Type", residence_type_options)
 
+# Smoking Status Dropdown
+smoking_status_options = ['All'] + df['smoking_status'].unique().tolist()
+selected_smoking_status = st.sidebar.selectbox("Select Smoking Status", smoking_status_options)
+
 # Average Glucose Level Slider
 avg_glucose_level_range = st.sidebar.slider("Select Average Glucose Level Range", float(df['avg_glucose_level'].min()), 
                                             float(df['avg_glucose_level'].max()), 
@@ -46,10 +50,6 @@ avg_glucose_level_range = st.sidebar.slider("Select Average Glucose Level Range"
 # BMI Slider
 bmi_range = st.sidebar.slider("Select BMI Range", float(df['bmi'].min()), float(df['bmi'].max()), 
                               (float(df['bmi'].min()), float(df['bmi'].max())))
-
-# Smoking Status Dropdown
-smoking_status_options = ['All'] + df['smoking_status'].unique().tolist()
-selected_smoking_status = st.sidebar.selectbox("Select Smoking Status", smoking_status_options)
 
 # Apply filters
 filtered_df = df[
@@ -60,9 +60,9 @@ filtered_df = df[
     ((df['ever_married'] == selected_ever_married) | (selected_ever_married == 'All')) &
     ((df['work_type'] == selected_work_type) | (selected_work_type == 'All')) &
     ((df['Residence_type'] == selected_residence_type) | (selected_residence_type == 'All')) &
+    ((df['smoking_status'] == selected_smoking_status) | (selected_smoking_status == 'All')) &
     ((df['avg_glucose_level'] >= avg_glucose_level_range[0]) & (df['avg_glucose_level'] <= avg_glucose_level_range[1])) &
-    ((df['bmi'] >= bmi_range[0]) & (df['bmi'] <= bmi_range[1])) &
-    ((df['smoking_status'] == selected_smoking_status) | (selected_smoking_status == 'All'))
+    ((df['bmi'] >= bmi_range[0]) & (df['bmi'] <= bmi_range[1]))
 ]
 
 # 3D Scatter Plot

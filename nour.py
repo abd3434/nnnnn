@@ -52,16 +52,18 @@ smoking_status_options = ['All'] + df['smoking_status'].unique().tolist()
 selected_smoking_status = st.sidebar.selectbox("Select Smoking Status", smoking_status_options)
 
 # Apply filters
-filtered_df = df[(df['gender'] == selected_gender or selected_gender == 'All') &
-                 (df['age'] >= age_range[0]) & (df['age'] <= age_range[1]) &
-                 (df['hypertension'] == int(selected_hypertension) or selected_hypertension == 'All') &
-                 (df['heart_disease'] == int(selected_heart_disease) or selected_heart_disease == 'All') &
-                 (df['ever_married'] == selected_ever_married or selected_ever_married == 'All') &
-                 (df['work_type'] == selected_work_type or selected_work_type == 'All') &
-                 (df['Residence_type'] == selected_residence_type or selected_residence_type == 'All') &
-                 (df['avg_glucose_level'] >= avg_glucose_level_range[0]) & (df['avg_glucose_level'] <= avg_glucose_level_range[1]) &
-                 (df['bmi'] >= bmi_range[0]) & (df['bmi'] <= bmi_range[1]) &
-                 (df['smoking_status'] == selected_smoking_status or selected_smoking_status == 'All')]
+filtered_df = df[
+    ((df['gender'] == selected_gender) | (selected_gender == 'All')) &
+    ((df['age'] >= age_range[0]) & (df['age'] <= age_range[1])) &
+    ((df['hypertension'] == int(selected_hypertension)) | (selected_hypertension == 'All')) &
+    ((df['heart_disease'] == int(selected_heart_disease)) | (selected_heart_disease == 'All')) &
+    ((df['ever_married'] == selected_ever_married) | (selected_ever_married == 'All')) &
+    ((df['work_type'] == selected_work_type) | (selected_work_type == 'All')) &
+    ((df['Residence_type'] == selected_residence_type) | (selected_residence_type == 'All')) &
+    ((df['avg_glucose_level'] >= avg_glucose_level_range[0]) & (df['avg_glucose_level'] <= avg_glucose_level_range[1])) &
+    ((df['bmi'] >= bmi_range[0]) & (df['bmi'] <= bmi_range[1])) &
+    ((df['smoking_status'] == selected_smoking_status) | (selected_smoking_status == 'All'))
+]
 
 # Display the filtered data
 st.write("Filtered Data")

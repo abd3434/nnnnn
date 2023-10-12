@@ -19,23 +19,16 @@ st.write("Stroke is a critical health condition that requires attention and unde
 # Filter the data based on conditions
 st.sidebar.header("Filter Data")
 
-# [Original Dropdowns and Sliders for Filtering Here]
+# Gender Dropdown
+gender_options = ['All'] + df['gender'].unique().tolist()
+selected_gender = st.sidebar.selectbox("Select Gender", gender_options)
+
+# [All Other Dropdowns and Sliders as in Your Original Code]
 
 # Apply filters
 filtered_df = df[
-    ((df['gender'] == selected_gender) | (selected_gender == 'All')) &
-    ((df['hypertension'].astype(str) == selected_hypertension) | (selected_hypertension == 'All')) &
-    ((df['heart_disease'].astype(str) == selected_heart_disease) | (selected_heart_disease == 'All')) &
-    ((df['ever_married'] == selected_ever_married) | (selected_ever_married == 'All')) &
-    ((df['work_type'] == selected_work_type) | (selected_work_type == 'All')) &
-    ((df['Residence_type'] == selected_residence_type) | (selected_residence_type == 'All')) &
-    ((df['smoking_status'] == selected_smoking_status) | (selected_smoking_status == 'All')) &
-    ((df['age'] >= age_range[0]) & (df['age'] <= age_range[1])) &
-    ((df['avg_glucose_level'] >= avg_glucose_level_range[0]) & (df['avg_glucose_level'] <= avg_glucose_level_range[1])) &
-    ((df['bmi'] >= bmi_range[0]) & (df['bmi'] <= bmi_range[1]))
+    # [All the Filtering Conditions as in Your Original Code]
 ]
-
-# [Rest of the Visualization Code Remains the Same as the Enhanced Code]
 
 # 3D Scatter Plot
 st.subheader("3D Scatter Plot of Age, Glucose Level, and BMI")

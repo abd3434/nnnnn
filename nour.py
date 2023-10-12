@@ -16,7 +16,26 @@ A stroke occurs when the blood supply to part of your brain is interrupted or re
 # Title and paragraph about Stroke
 st.write("Stroke is a critical health condition that requires attention and understanding. It is a significant medical issue that impacts numerous individuals worldwide. Exploring and visualizing data related to stroke can provide insights into its prevalence, risk factors, and potential preventative measures.")
 
-# [Filtering Code Remains the Same as Your Original Code]
+# Filter the data based on conditions
+st.sidebar.header("Filter Data")
+
+# [Original Dropdowns and Sliders for Filtering Here]
+
+# Apply filters
+filtered_df = df[
+    ((df['gender'] == selected_gender) | (selected_gender == 'All')) &
+    ((df['hypertension'].astype(str) == selected_hypertension) | (selected_hypertension == 'All')) &
+    ((df['heart_disease'].astype(str) == selected_heart_disease) | (selected_heart_disease == 'All')) &
+    ((df['ever_married'] == selected_ever_married) | (selected_ever_married == 'All')) &
+    ((df['work_type'] == selected_work_type) | (selected_work_type == 'All')) &
+    ((df['Residence_type'] == selected_residence_type) | (selected_residence_type == 'All')) &
+    ((df['smoking_status'] == selected_smoking_status) | (selected_smoking_status == 'All')) &
+    ((df['age'] >= age_range[0]) & (df['age'] <= age_range[1])) &
+    ((df['avg_glucose_level'] >= avg_glucose_level_range[0]) & (df['avg_glucose_level'] <= avg_glucose_level_range[1])) &
+    ((df['bmi'] >= bmi_range[0]) & (df['bmi'] <= bmi_range[1]))
+]
+
+# [Rest of the Visualization Code Remains the Same as the Enhanced Code]
 
 # 3D Scatter Plot
 st.subheader("3D Scatter Plot of Age, Glucose Level, and BMI")
